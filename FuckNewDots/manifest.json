@@ -1,0 +1,15 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
+  "id": "FuckNewDots",
+  "name": "FuckNewDots",
+  "author": "PulseLane",
+  "version": "1.0.0",
+  "description": "Reverts the dot note hitboxes to pre-1.20",
+  "gameVersion": "1.24.1",
+  "dependsOn": {
+    "BSIPA": "^4.2.2",
+    "SiraUtil": "^3.1.2",
+    "BeatSaberMarkupLanguage": "^1.6.0",
+    "SongCore": "^3.9.6"
+  }
+}

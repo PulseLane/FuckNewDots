@@ -1,0 +1,10 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd' >
+	<settings-container>
+		<checkbox-setting value='alwaysEnabled'  text='Always Enabled' hover-hint='Force old dot note hitboxes on all characteristics (Disables score submission)' apply-on-change='true'/>
+		<checkbox-setting value='characteristic' text='Create New Characteristic' hover-hint='Adds a new characteristic to all maps with dots for enabled score submission.' apply-on-change='true'/>
+
+		<checkbox-setting value='warning' text='Show Warnings' hover-hint='Adds an icon to difficulties containing any dot notes' apply-on-change='true'/>
+		<color-setting value='newDotColor' text='New Dot Hitboxes Color' hover-hint='The color to use on the warning icon when using the new dot hitboxes (score submission enabled)' apply-on-change='true' active='~warning' />
+		<color-setting value='oldDotColor' text='Old Dot Hitboxes Color' hover-hint='The color to use on the warning icon when using the new old hitboxes (score submission disabled)' apply-on-change='true' active='~warning'/>
+	</settings-container>
+</bg>

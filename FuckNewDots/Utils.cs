@@ -1,10 +1,7 @@
 ﻿using BeatmapSaveDataVersion3;
 using IPA.Utilities;
 using Polyglot;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace FuckNewDots
@@ -122,7 +119,7 @@ namespace FuckNewDots
 
         public static BeatmapCharacteristicSO CreateBeatmapCharacteristicSO(BeatmapCharacteristicSO oldBeatmapCharacteristicSO)
         {
-            BeatmapCharacteristicSO beatmapCharacteristicSO =  BeatmapCharacteristicSO.Instantiate(oldBeatmapCharacteristicSO);
+            BeatmapCharacteristicSO beatmapCharacteristicSO = BeatmapCharacteristicSO.Instantiate(oldBeatmapCharacteristicSO);
 
             Sprite icon = GetIcon(oldBeatmapCharacteristicSO.characteristicNameLocalizationKey);
             string name = beatmapCharacteristicSO.GetField<string, BeatmapCharacteristicSO>("_serializedName") + "OldDots";
@@ -139,7 +136,7 @@ namespace FuckNewDots
 
         public static bool ContainsDotNotes(IDifficultyBeatmap difficultyBeatmap)
         {
-            BeatmapSaveData beatmapSaveData = ((CustomDifficultyBeatmap)difficultyBeatmap).beatmapSaveData;
+            BeatmapSaveData beatmapSaveData = ((CustomDifficultyBeatmap) difficultyBeatmap).beatmapSaveData;
             return beatmapSaveData.colorNotes.Any(x => x.cutDirection == NoteCutDirection.Any);
         }
 

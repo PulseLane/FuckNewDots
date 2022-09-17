@@ -1,8 +1,6 @@
 ﻿using FuckNewDots.Harmony_Patches;
 using SiraUtil.Submissions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Zenject;
 
 namespace FuckNewDots.Managers

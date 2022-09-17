@@ -1,17 +1,14 @@
 ﻿using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.GameplaySetup;
-using SiraUtil.Submissions;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using UnityEngine;
 using Zenject;
 
 namespace FuckNewDots.UI
 {
     internal class ModifierUI : IInitializable, IDisposable, INotifyPropertyChanged
-    {    
+    {
         public event PropertyChangedEventHandler PropertyChanged;
         private Config _config;
 

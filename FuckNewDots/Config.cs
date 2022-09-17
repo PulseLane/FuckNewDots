@@ -2,9 +2,7 @@
 using IPA.Config.Stores.Attributes;
 using IPA.Config.Stores.Converters;
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text;
 using UnityEngine;
 
 [assembly: InternalsVisibleTo(GeneratedStore.AssemblyVisibilityTarget)]
@@ -22,7 +20,7 @@ namespace FuckNewDots
 
         [UseConverter(typeof(HexColorConverter))]
         public virtual Color oldDotColor { get; set; } = Color.red;
-        
+
         public virtual void Changed() { ChangeEvent?.Invoke(); }
     }
 }

@@ -1,13 +1,9 @@
 ﻿using BeatSaberMarkupLanguage;
-using BeatSaberMarkupLanguage.Components;
 using FuckNewDots.Harmony_Patches;
 using HMUI;
-using IPA.Logging.Printers;
 using IPA.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using Zenject;
 using static BeatSaberMarkupLanguage.BeatSaberUI;

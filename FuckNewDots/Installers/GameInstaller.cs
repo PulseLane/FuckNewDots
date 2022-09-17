@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FuckNewDots.Managers;
+﻿using FuckNewDots.Managers;
 using Zenject;
 
 namespace FuckNewDots.Installers

@@ -3,7 +3,6 @@ using IPA.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FuckNewDots.Harmony_Patches
@@ -66,10 +65,10 @@ namespace FuckNewDots.Harmony_Patches
                 {
                     difficultyBeatmapSets.Add(customDifficultyBeatmapSet);
                 }
-                
+
             }
 
-            ((BeatmapLevelData)level.beatmapLevelData).SetField<BeatmapLevelData, IReadOnlyList<IDifficultyBeatmapSet>>("_difficultyBeatmapSets", difficultyBeatmapSets.ToArray());
+            ((BeatmapLevelData) level.beatmapLevelData).SetField<BeatmapLevelData, IReadOnlyList<IDifficultyBeatmapSet>>("_difficultyBeatmapSets", difficultyBeatmapSets.ToArray());
         }
 
         static async Task<List<CustomDifficultyBeatmap>> CreateCustomDifficulties(IReadOnlyList<IDifficultyBeatmap> difficultyBeatmaps, CustomDifficultyBeatmapSet beatmapSet)
@@ -99,7 +98,7 @@ namespace FuckNewDots.Harmony_Patches
                 IDifficultyBeatmap difficultyBeatmap = difficultyBeatmaps[index];
                 IBeatmapDataBasicInfo beatmapDataBasicInfo = await difficultyBeatmap.GetBeatmapDataBasicInfoAsync();
                 customDifficulties.Add(new CustomDifficultyBeatmap(
-                    difficultyBeatmap.level, 
+                    difficultyBeatmap.level,
                     beatmapSet,
                     difficultyBeatmap.difficulty,
                     difficultyBeatmap.difficultyRank,
@@ -117,13 +116,13 @@ namespace FuckNewDots.Harmony_Patches
         {
             if (level.beatmapLevelData.difficultyBeatmapSets.Any(x => x.beatmapCharacteristic.serializedName.EndsWith("OldDots")))
             {
-                ((BeatmapLevelData)level.beatmapLevelData).SetField<BeatmapLevelData, IReadOnlyList<IDifficultyBeatmapSet>>("_difficultyBeatmapSets", level.beatmapLevelData.difficultyBeatmapSets.Where(x => !x.beatmapCharacteristic.serializedName.EndsWith("OldDots")).ToArray());
+                ((BeatmapLevelData) level.beatmapLevelData).SetField<BeatmapLevelData, IReadOnlyList<IDifficultyBeatmapSet>>("_difficultyBeatmapSets", level.beatmapLevelData.difficultyBeatmapSets.Where(x => !x.beatmapCharacteristic.serializedName.EndsWith("OldDots")).ToArray());
             }
         }
 
         static void ConfigChanged()
         {
-            
+
             standardLevelDetailView.SetContent(lastLevel, standardLevelDetailView.selectedDifficultyBeatmap.difficulty, lastDefaultBeatmapCharacteristic, lastPlayerData);
         }
     }

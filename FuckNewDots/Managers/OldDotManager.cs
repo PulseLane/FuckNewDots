@@ -26,7 +26,7 @@ namespace FuckNewDots.Managers
         {
             bool usingCharacteristic = _difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.serializedName.EndsWith("OldDots");
             Plugin.logger.Debug(_difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.serializedName);
-            if (_config.alwaysEnabled || usingCharacteristic)
+            if (usingCharacteristic || (_config.alwaysEnabled && Utils.ContainsDotNotes(_difficultyBeatmap)))
             {
                 Plugin.logger.Debug("Old dots enabled");
                 GameNoteControllerInitPatch.active = true;
@@ -35,6 +35,11 @@ namespace FuckNewDots.Managers
                     Plugin.logger.Debug("Score submission disabled");
                     _siraSubmission.DisableScoreSubmission("OldDots", "Using old dot note hitboxes with a nonexempt characteristic");
                 }
+            }
+            // shouldn't be necessary, but just in case
+            else
+            {
+                GameNoteControllerInitPatch.active = false;
             }
         }
 

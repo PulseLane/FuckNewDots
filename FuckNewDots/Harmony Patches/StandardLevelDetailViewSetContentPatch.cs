@@ -1,5 +1,4 @@
-﻿using BeatmapSaveDataVersion3;
-using HarmonyLib;
+﻿using HarmonyLib;
 using IPA.Utilities;
 using System;
 using System.Collections.Generic;
@@ -82,8 +81,7 @@ namespace FuckNewDots.Harmony_Patches
 
             foreach (IDifficultyBeatmap difficultyBeatmap in difficultyBeatmaps)
             {
-                BeatmapSaveData beatmapSaveData = ((CustomDifficultyBeatmap)difficultyBeatmap).beatmapSaveData;
-                if (beatmapSaveData.colorNotes.Any(x => x.cutDirection == NoteCutDirection.Any))
+                if (Utils.ContainsDotNotes(difficultyBeatmap))
                 {
                     Plugin.logger.Debug($"Dots found in {difficultyBeatmap.difficulty}");
                     indices.Add(i);

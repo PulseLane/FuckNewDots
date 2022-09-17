@@ -1,5 +1,4 @@
-﻿using BeatmapSaveDataVersion3;
-using BeatSaberMarkupLanguage;
+﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Components;
 using FuckNewDots.Harmony_Patches;
 using HMUI;
@@ -99,8 +98,7 @@ namespace FuckNewDots.Managers
                         foreach (IDifficultyBeatmap difficultyBeatmap in difficultyBeatmapSet.difficultyBeatmaps)
                         {
                             Plugin.logger.Debug(difficultyBeatmap.difficulty.ToString());
-                            BeatmapSaveData beatmapSaveData = ((CustomDifficultyBeatmap)difficultyBeatmap).beatmapSaveData;
-                            if (beatmapSaveData.colorNotes.Any(x => x.cutDirection == NoteCutDirection.Any))
+                            if (Utils.ContainsDotNotes(difficultyBeatmap))
                             {
                                 difficultiesToStrike.Add(difficultyBeatmap.difficulty);
                             }

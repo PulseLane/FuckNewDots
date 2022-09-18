@@ -28,7 +28,7 @@ namespace FuckNewDots.Managers
             {
                 Plugin.logger.Debug("Old dots enabled");
                 GameNoteControllerInitPatch.active = true;
-                if (_config.alwaysEnabled && !usingCharacteristic)
+                if (!usingCharacteristic)
                 {
                     Plugin.logger.Debug("Score submission disabled");
                     _siraSubmission.DisableScoreSubmission("OldDots", "Using old dot note hitboxes with a nonexempt characteristic");

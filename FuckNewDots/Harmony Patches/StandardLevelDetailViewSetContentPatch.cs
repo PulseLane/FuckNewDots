@@ -82,12 +82,7 @@ namespace FuckNewDots.Harmony_Patches
             {
                 if (Utils.ContainsDotNotes(difficultyBeatmap))
                 {
-                    Plugin.logger.Debug($"Dots found in {difficultyBeatmap.difficulty}");
                     indices.Add(i);
-                }
-                else
-                {
-                    Plugin.logger.Debug($"No dots in {difficultyBeatmap.difficulty}");
                 }
                 i++;
             }

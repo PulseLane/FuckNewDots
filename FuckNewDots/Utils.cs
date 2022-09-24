@@ -1,17 +1,11 @@
 ﻿using BeatmapSaveDataVersion3;
-using BeatSaberMarkupLanguage;
-using HMUI;
 using IPA.Loader;
-using IPA.Loader.Features;
 using IPA.Utilities;
 using Polyglot;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
 using UnityEngine;
 
 namespace FuckNewDots
@@ -142,7 +136,7 @@ namespace FuckNewDots
             Sprite icon = GetIcon(oldBeatmapCharacteristicSO.characteristicNameLocalizationKey);
             if (icon == null)
             {
-                Plugin.logger.Debug("sprite was null");
+                Plugin.logger.Error("sprite was null");
             }
             string name = beatmapCharacteristicSO.GetField<string, BeatmapCharacteristicSO>("_serializedName") + "OldDots";
             string description = Localization.Get(beatmapCharacteristicSO.descriptionLocalizationKey) + " using old dot note hitboxes";

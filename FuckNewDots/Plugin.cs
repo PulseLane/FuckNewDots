@@ -2,9 +2,6 @@
 using IPA;
 using IPA.Config.Stores;
 using SiraUtil.Zenject;
-using SongCore;
-using System.Linq;
-using UnityEngine;
 using IPALogger = IPA.Logging.Logger;
 
 namespace FuckNewDots

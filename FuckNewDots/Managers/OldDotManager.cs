@@ -13,7 +13,6 @@ namespace FuckNewDots.Managers
 
         public OldDotManager(Config config, Submission submission, IDifficultyBeatmap difficultyBeatmap)
         {
-            Plugin.logger.Debug("olddotmanager ctor");
             _config = config;
             _siraSubmission = submission;
 

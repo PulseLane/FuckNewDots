@@ -336,6 +336,3 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
-
-# Don't feel like figuring out licensing on these
-*.png

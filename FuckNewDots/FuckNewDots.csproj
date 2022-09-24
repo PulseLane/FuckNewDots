@@ -32,13 +32,6 @@
     <DisableZipRelease>True</DisableZipRelease>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Resources\dot360.png" />
-    <None Remove="Resources\dot90.png" />
-    <None Remove="Resources\dotlawless.png" />
-    <None Remove="Resources\dotlightshow.png" />
-    <None Remove="Resources\dotnoarrow.png" />
-    <None Remove="Resources\dotsingle.png" />
-    <None Remove="Resources\dotstandard.png" />
     <None Remove="UI\Views\modifierUI.bsml" />
   </ItemGroup>
   <ItemGroup>
@@ -148,13 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
-    <EmbeddedResource Include="Resources\dot360.png" />
-    <EmbeddedResource Include="Resources\dot90.png" />
-    <EmbeddedResource Include="Resources\dotlawless.png" />
-    <EmbeddedResource Include="Resources\dotlightshow.png" />
-    <EmbeddedResource Include="Resources\dotnoarrow.png" />
-    <EmbeddedResource Include="Resources\dotsingle.png" />
-    <EmbeddedResource Include="Resources\dotstandard.png" />
     <EmbeddedResource Include="UI\Views\modifierUI.bsml" />
   </ItemGroup>
   <ItemGroup>

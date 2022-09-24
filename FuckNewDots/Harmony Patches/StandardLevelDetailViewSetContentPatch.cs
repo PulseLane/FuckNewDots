@@ -122,7 +122,6 @@ namespace FuckNewDots.Harmony_Patches
 
         static void ConfigChanged()
         {
-
             standardLevelDetailView.SetContent(lastLevel, standardLevelDetailView.selectedDifficultyBeatmap.difficulty, lastDefaultBeatmapCharacteristic, lastPlayerData);
         }
     }

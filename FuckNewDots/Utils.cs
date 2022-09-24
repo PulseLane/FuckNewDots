@@ -163,6 +163,12 @@ namespace FuckNewDots
             return beatmapSaveData.colorNotes.Any(x => x.cutDirection == NoteCutDirection.Any);
         }
 
+        public static int CountDotNotes(IDifficultyBeatmap difficultyBeatmap)
+        {
+            BeatmapSaveData beatmapSaveData = ((CustomDifficultyBeatmap) difficultyBeatmap).beatmapSaveData;
+            return beatmapSaveData.colorNotes.Where(x => x.cutDirection == NoteCutDirection.Any).Count();
+        }
+
         public static Sprite GetIcon(string characteristicName)
         {
             const string backgroundSpriteName = "NoArrowsIcon";

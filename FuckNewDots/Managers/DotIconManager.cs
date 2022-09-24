@@ -4,6 +4,7 @@ using HMUI;
 using IPA.Utilities;
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Zenject;
 using static BeatSaberMarkupLanguage.BeatSaberUI;
@@ -16,51 +17,32 @@ namespace FuckNewDots.Managers
 
         private Config _config;
 
-        private BeatmapCharacteristicSegmentedControlController _beatmapCharacteristicSegmentedControlController;
-        private BeatmapDifficultySegmentedControlController _beatmapDifficultySegmentedControlController;
+        private StandardLevelDetailView _standardLevelDetailView;
+        private LevelParamsPanel _levelParamsPanel;
 
         private readonly IconSegmentedControl _beatmapCharacteristicSegmentedControl;
-        private SegmentedControl _beatmapDifficultySegmentedControl;
 
-        private IBeatmapLevel _level;
+        private bool _warningIconSet = false;
 
         public DotIconManager(Config config, StandardLevelDetailViewController standardLevelDetailViewController)
         {
             _config = config;
-            ; StandardLevelDetailView standardLevelDetailView = standardLevelDetailViewController.GetField<StandardLevelDetailView, StandardLevelDetailViewController>("_standardLevelDetailView");
+            _standardLevelDetailView = standardLevelDetailViewController.GetField<StandardLevelDetailView, StandardLevelDetailViewController>("_standardLevelDetailView");
+            _levelParamsPanel = _standardLevelDetailView.GetField<LevelParamsPanel, StandardLevelDetailView>("_levelParamsPanel");
 
-            _beatmapCharacteristicSegmentedControlController = standardLevelDetailView.GetField<BeatmapCharacteristicSegmentedControlController, StandardLevelDetailView>("_beatmapCharacteristicSegmentedControlController");
-            _beatmapDifficultySegmentedControlController = standardLevelDetailView.GetField<BeatmapDifficultySegmentedControlController, StandardLevelDetailView>("_beatmapDifficultySegmentedControlController");
-            _beatmapCharacteristicSegmentedControl = _beatmapCharacteristicSegmentedControlController.GetField<IconSegmentedControl, BeatmapCharacteristicSegmentedControlController>("_segmentedControl");
-            _beatmapDifficultySegmentedControl = _beatmapDifficultySegmentedControlController.GetField<TextSegmentedControl, BeatmapDifficultySegmentedControlController>("_difficultySegmentedControl");
+            BeatmapCharacteristicSegmentedControlController beatmapCharacteristicSegmentedControlController = _standardLevelDetailView.GetField<BeatmapCharacteristicSegmentedControlController, StandardLevelDetailView>("_beatmapCharacteristicSegmentedControlController");
+            _beatmapCharacteristicSegmentedControl = beatmapCharacteristicSegmentedControlController.GetField<IconSegmentedControl, BeatmapCharacteristicSegmentedControlController>("_segmentedControl");
         }
 
         public void Initialize()
         {
             StandardLevelDetailViewSetContentPatch.LevelSelectedEvent += OnLevelUpdated;
             _beatmapCharacteristicSegmentedControl.didSelectCellEvent += OnBeatmapCharacteristicSegmentedControlDidSelectCellEvent;
-            //_beatmapDifficultySegmentedControl.didSelectCellEvent += OnBeatmapDifficultySegmentedControlDidSelectCellEvent;
-            //BeatmapDifficultySegmentedControlController_SetData.CharacteristicsSegmentedControllerDataSetEvent += BeatmapDifficultySegmentedControlController_CharacteristicsSegmentedControllerDataSetEvent;
             BeatmapDifficultySegmentedControlControllerSetDataPatch.BeatmapDifficultySegmentedControlControllerSetDataEvent += OnBeatmapDifficultySegmentedControlControllerSetDataEvent;
-
-            //_config.ChangeEvent += OnConfigChanged;
-        }
-
-        private void OnConfigChanged()
-        {
-            if (_config.addWarningIcon)
-            {
-                AddDotIcon();
-            }
-            else
-            {
-                RemoveDotIcon();
-            }
         }
 
         private void OnLevelUpdated(IBeatmapLevel level)
         {
-            _level = level;
             AddDotIcon();
         }
 
@@ -73,104 +55,62 @@ namespace FuckNewDots.Managers
         {
             if (!_config.addWarningIcon)
             {
-                return;
-            }
-
-            Plugin.logger.Debug("beatmap characteristic segmented control did select cell event");
-            if (_beatmapCharacteristicSegmentedControlController.selectedBeatmapCharacteristic == null)
-            {
-                return;
-            }
-
-            if (_level != null && !_beatmapCharacteristicSegmentedControlController.selectedBeatmapCharacteristic.serializedName.EndsWith("OldDots"))
-            {
-                Plugin.logger.Debug(_beatmapCharacteristicSegmentedControlController.selectedBeatmapCharacteristic.serializedName);
-                foreach (IDifficultyBeatmapSet difficultyBeatmapSet in _level.beatmapLevelData.difficultyBeatmapSets)
+                if (_warningIconSet)
                 {
-                    Plugin.logger.Debug(difficultyBeatmapSet.beatmapCharacteristic.serializedName);
-                    if (difficultyBeatmapSet.beatmapCharacteristic.serializedName == _beatmapCharacteristicSegmentedControlController.selectedBeatmapCharacteristic.serializedName)
-                    {
-                        HashSet<BeatmapDifficulty> difficultiesToStrike = new HashSet<BeatmapDifficulty>();
-                        foreach (IDifficultyBeatmap difficultyBeatmap in difficultyBeatmapSet.difficultyBeatmaps)
-                        {
-                            Plugin.logger.Debug(difficultyBeatmap.difficulty.ToString());
-                            if (Utils.ContainsDotNotes(difficultyBeatmap))
-                            {
-                                difficultiesToStrike.Add(difficultyBeatmap.difficulty);
-                            }
-                        }
-
-                        if (difficultiesToStrike.Count > 0)
-                        {
-                            List<SegmentedControlCell> difficultyCells = _beatmapDifficultySegmentedControl.GetField<List<SegmentedControlCell>, SegmentedControl>("_cells");
-
-                            foreach (BeatmapDifficulty difficulty in _beatmapDifficultySegmentedControlController.GetField<List<BeatmapDifficulty>, BeatmapDifficultySegmentedControlController>("_difficulties"))
-                            {
-                                if (difficultiesToStrike.Contains(difficulty))
-                                {
-                                    Plugin.logger.Debug("finding cell");
-                                    SegmentedControlCell cell = difficultyCells[_beatmapDifficultySegmentedControlController.GetClosestDifficultyIndex(difficulty)];
-
-                                    Transform background = cell.transform.GetChild(0);
-                                    background.gameObject.SetActive(true);
-
-                                    Plugin.logger.Debug("grabbing image view");
-                                    var imageView = background.GetComponent<ImageView>();
-                                    if (imageView)
-                                    {
-                                        // Grab the background color of background housing the difficulty labels
-                                        Color backgroundColor = _config.alwaysEnabled ? _config.oldDotColor : _config.newDotColor;
-
-                                        imageView.color0 = backgroundColor;
-                                        imageView.color1 = backgroundColor;
-
-                                        Plugin.logger.Debug("text width");
-                                        float textWidth = Math.Min(((RectTransform) cell.transform).sizeDelta.x, cell.transform.GetChild(1).GetComponent<CurvedTextMeshPro>().preferredWidth);
-                                        background.localPosition = new Vector3(-(textWidth / 2) - 3f, 0, 0);
-
-                                        Plugin.logger.Debug("resizing");
-                                        imageView.preserveAspect = true;
-                                        imageView.SetImage("#NoArrowsIcon");
-                                        background.localScale = new Vector3(0.25f / 3f * difficultyCells.Count, 0.625f, 1.0f);
-                                        Plugin.logger.Debug("done");
-
-                                    }
-                                    else
-                                    {
-                                        Plugin.logger.Error("no image view");
-                                    }
-
-                                }
-                            }
-                        }
-
-                    }
+                    RemoveDotIcon();
                 }
+                return;
+            }
+
+            IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
+            if (difficultyBeatmap == null ||
+                difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.serializedName.EndsWith("OldDots"))
+            {
+                return;
+            }
+
+            int dotCount = Utils.CountDotNotes(difficultyBeatmap);
+            if (dotCount > 0)
+            {
+                TextMeshProUGUI noteCountTextMesh = _levelParamsPanel.GetField<TextMeshProUGUI, LevelParamsPanel>("_notesCountText");
+                noteCountTextMesh.richText = true;
+                noteCountTextMesh.text += $" <size=50%>({dotCount})</size>";
+
+                ImageView imageView = _levelParamsPanel.transform.GetChild(1).GetChild(0).GetComponent<ImageView>();
+                imageView.SetImage("#NoArrowsIcon");
+
+                Color backgroundColor = _config.alwaysEnabled ? _config.oldDotColor : _config.newDotColor;
+                imageView.color = backgroundColor;
+
+                _warningIconSet = true;
+            }
+            else
+            {
+                RemoveDotIcon();
             }
         }
 
         private void RemoveDotIcon()
         {
-            if (_level != null)
+            IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
+            if (difficultyBeatmap == null)
             {
-                foreach (IDifficultyBeatmapSet difficultyBeatmapSet in _level.beatmapLevelData.difficultyBeatmapSets)
-                {
-                    List<SegmentedControlCell> difficultyCells = _beatmapDifficultySegmentedControl.GetField<List<SegmentedControlCell>, SegmentedControl>("_cells");
-
-                    foreach (BeatmapDifficulty difficulty in _beatmapDifficultySegmentedControlController.GetField<List<BeatmapDifficulty>, BeatmapDifficultySegmentedControlController>("_difficulties"))
-                    {
-                        SegmentedControlCell cell = difficultyCells[_beatmapDifficultySegmentedControlController.GetClosestDifficultyIndex(difficulty)];
-
-                        Transform background = cell.transform.GetChild(0);
-                        background.gameObject.SetActive(false);
-                    }
-                }
+                return;
             }
-        }
 
-        private void OnBeatmapDifficultySegmentedControlDidSelectCellEvent(SegmentedControl arg1, int arg2)
-        {
-            throw new NotImplementedException();
+            TextMeshProUGUI noteCountTextMesh = _levelParamsPanel.GetField<TextMeshProUGUI, LevelParamsPanel>("_notesCountText");
+            noteCountTextMesh.richText = false;
+            noteCountTextMesh.text = noteCountTextMesh.text.Split(' ')[0];
+
+            Transform notesCountTransform = _levelParamsPanel.transform.GetChild(1);
+            if (notesCountTransform.name == "NotesCount")
+            {
+                ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
+                imageView.SetImage("#GameNoteIcon");
+                imageView.color = Color.white;
+
+                _warningIconSet = false;
+            }
         }
 
         private void OnBeatmapDifficultySegmentedControlControllerSetDataEvent()
@@ -182,9 +122,7 @@ namespace FuckNewDots.Managers
         {
             StandardLevelDetailViewSetContentPatch.LevelSelectedEvent -= OnLevelUpdated;
             _beatmapCharacteristicSegmentedControl.didSelectCellEvent -= OnBeatmapCharacteristicSegmentedControlDidSelectCellEvent;
-            //_beatmapDifficultySegmentedControl.didSelectCellEvent -= OnBeatmapDifficultySegmentedControlDidSelectCellEvent;
             BeatmapDifficultySegmentedControlControllerSetDataPatch.BeatmapDifficultySegmentedControlControllerSetDataEvent -= OnBeatmapDifficultySegmentedControlControllerSetDataEvent;
-            //_config.ChangeEvent -= OnConfigChanged;
         }
     }
 }

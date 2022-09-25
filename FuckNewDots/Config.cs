@@ -11,8 +11,8 @@ namespace FuckNewDots
     internal class Config
     {
         internal Action ChangeEvent;
-        public virtual bool alwaysEnabled { get; set; } = true;
-        public virtual bool addCustomCharacteristic { get; set; } = false;
+        public virtual bool alwaysEnabled { get; set; } = false;
+        public virtual bool addCustomCharacteristic { get; set; } = true;
         public virtual bool addWarningIcon { get; set; } = true;
 
         [UseConverter(typeof(HexColorConverter))]

@@ -51,20 +51,21 @@ namespace FuckNewDots.Managers
             AddDotIcon();
         }
 
+        private void OnBeatmapDifficultySegmentedControlControllerSetDataEvent()
+        {
+            AddDotIcon();
+        }
+
         private void AddDotIcon()
         {
             if (!_config.addWarningIcon)
             {
-                if (_warningIconSet)
-                {
-                    RemoveDotIcon();
-                }
+                RemoveDotIcon();
                 return;
             }
 
             IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
-            if (difficultyBeatmap == null ||
-                difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.serializedName.EndsWith("OldDots"))
+            if (difficultyBeatmap == null)
             {
                 return;
             }
@@ -77,11 +78,17 @@ namespace FuckNewDots.Managers
                 noteCountTextMesh.text += $" <size=50%>({dotCount})</size>";
 
                 ImageView imageView = _levelParamsPanel.transform.GetChild(1).GetChild(0).GetComponent<ImageView>();
-                imageView.SetImage("#NoArrowsIcon");
+                if (difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.serializedName.EndsWith("OldDots"))
+                {
+                    ResetIcon(imageView);
+                }
+                else
+                {
+                    imageView.SetImage("#NoArrowsIcon");
 
-                Color backgroundColor = _config.alwaysEnabled ? _config.oldDotColor : _config.newDotColor;
-                imageView.color = backgroundColor;
-
+                    Color backgroundColor = _config.alwaysEnabled ? _config.oldDotColor : _config.newDotColor;
+                    imageView.color = backgroundColor;
+                }
                 _warningIconSet = true;
             }
             else
@@ -92,6 +99,11 @@ namespace FuckNewDots.Managers
 
         private void RemoveDotIcon()
         {
+            if (!_warningIconSet)
+            {
+                return;
+            }
+
             IDifficultyBeatmap difficultyBeatmap = _standardLevelDetailView.selectedDifficultyBeatmap;
             if (difficultyBeatmap == null)
             {
@@ -106,16 +118,16 @@ namespace FuckNewDots.Managers
             if (notesCountTransform.name == "NotesCount")
             {
                 ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
-                imageView.SetImage("#GameNoteIcon");
-                imageView.color = Color.white;
+                ResetIcon(imageView);
 
                 _warningIconSet = false;
             }
         }
 
-        private void OnBeatmapDifficultySegmentedControlControllerSetDataEvent()
+        private void ResetIcon(ImageView imageView)
         {
-            AddDotIcon();
+            imageView.SetImage("#GameNoteIcon");
+            imageView.color = Color.white;
         }
 
         public void Dispose()

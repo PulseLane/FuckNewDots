@@ -77,7 +77,13 @@ namespace FuckNewDots.Managers
                 noteCountTextMesh.richText = true;
                 noteCountTextMesh.text += $" <size=50%>({dotCount})</size>";
 
-                ImageView imageView = _levelParamsPanel.transform.GetChild(1).GetChild(0).GetComponent<ImageView>();
+                Transform notesCountTransform = _levelParamsPanel.transform.GetChild(1);
+                if (notesCountTransform.name != "NotesCount")
+                {
+                    return;
+                }
+
+                ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
                 if (difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.serializedName.EndsWith("OldDots"))
                 {
                     ResetIcon(imageView);

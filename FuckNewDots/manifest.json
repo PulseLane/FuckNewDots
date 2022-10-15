@@ -3,7 +3,7 @@
   "id": "FuckNewDots",
   "name": "FuckNewDots",
   "author": "PulseLane",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reverts the dot note hitboxes to pre-1.20",
   "gameVersion": "1.24.1",
   "dependsOn": {

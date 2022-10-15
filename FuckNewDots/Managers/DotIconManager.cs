@@ -121,9 +121,11 @@ namespace FuckNewDots.Managers
             noteCountTextMesh.text = noteCountTextMesh.text.Split(' ')[0];
 
             Transform notesCountTransform = _levelParamsPanel.transform.GetChild(1);
+           
+            ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
+            imageView.color = Color.white;
             if (notesCountTransform.name == "NotesCount")
             {
-                ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
                 ResetIcon(imageView);
 
                 _warningIconSet = false;

@@ -23,7 +23,7 @@ namespace FuckNewDots
             _harmony = new Harmony(_harmonyID);
 
             zenjector.Install<Installers.MenuInstaller>(Location.Menu, config);
-            zenjector.Install<Installers.GameInstaller>(Location.Singleplayer, config);
+            zenjector.Install<Installers.GameInstaller>(Location.StandardPlayer, config);
         }
 
         [OnEnable]

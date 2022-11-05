@@ -20,8 +20,6 @@ namespace FuckNewDots.Managers
         private StandardLevelDetailView _standardLevelDetailView;
         private LevelParamsPanel _levelParamsPanel;
 
-        private readonly IconSegmentedControl _beatmapCharacteristicSegmentedControl;
-
         private bool _warningIconSet = false;
 
         public DotIconManager(Config config, StandardLevelDetailViewController standardLevelDetailViewController)
@@ -29,29 +27,14 @@ namespace FuckNewDots.Managers
             _config = config;
             _standardLevelDetailView = standardLevelDetailViewController.GetField<StandardLevelDetailView, StandardLevelDetailViewController>("_standardLevelDetailView");
             _levelParamsPanel = _standardLevelDetailView.GetField<LevelParamsPanel, StandardLevelDetailView>("_levelParamsPanel");
-
-            BeatmapCharacteristicSegmentedControlController beatmapCharacteristicSegmentedControlController = _standardLevelDetailView.GetField<BeatmapCharacteristicSegmentedControlController, StandardLevelDetailView>("_beatmapCharacteristicSegmentedControlController");
-            _beatmapCharacteristicSegmentedControl = beatmapCharacteristicSegmentedControlController.GetField<IconSegmentedControl, BeatmapCharacteristicSegmentedControlController>("_segmentedControl");
         }
 
         public void Initialize()
         {
-            StandardLevelDetailViewSetContentPatch.LevelSelectedEvent += OnLevelUpdated;
-            _beatmapCharacteristicSegmentedControl.didSelectCellEvent += OnBeatmapCharacteristicSegmentedControlDidSelectCellEvent;
-            BeatmapDifficultySegmentedControlControllerSetDataPatch.BeatmapDifficultySegmentedControlControllerSetDataEvent += OnBeatmapDifficultySegmentedControlControllerSetDataEvent;
+            StandardLevelDetailViewRefreshContentPatch.LevelSelectedEvent += OnLevelUpdated;
         }
 
         private void OnLevelUpdated(IBeatmapLevel level)
-        {
-            AddDotIcon();
-        }
-
-        private void OnBeatmapCharacteristicSegmentedControlDidSelectCellEvent(SegmentedControl _, int __)
-        {
-            AddDotIcon();
-        }
-
-        private void OnBeatmapDifficultySegmentedControlControllerSetDataEvent()
         {
             AddDotIcon();
         }
@@ -78,10 +61,6 @@ namespace FuckNewDots.Managers
                 noteCountTextMesh.text += $" <size=50%>({dotCount})</size>";
 
                 Transform notesCountTransform = _levelParamsPanel.transform.GetChild(1);
-                if (notesCountTransform.name != "NotesCount")
-                {
-                    return;
-                }
 
                 ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
                 if (difficultyBeatmap.parentDifficultyBeatmapSet.beatmapCharacteristic.serializedName.EndsWith("OldDots"))
@@ -121,15 +100,11 @@ namespace FuckNewDots.Managers
             noteCountTextMesh.text = noteCountTextMesh.text.Split(' ')[0];
 
             Transform notesCountTransform = _levelParamsPanel.transform.GetChild(1);
-           
-            ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
-            imageView.color = Color.white;
-            if (notesCountTransform.name == "NotesCount")
-            {
-                ResetIcon(imageView);
 
-                _warningIconSet = false;
-            }
+            ImageView imageView = notesCountTransform.GetChild(0).GetComponent<ImageView>();
+            ResetIcon(imageView);
+
+            _warningIconSet = false;
         }
 
         private void ResetIcon(ImageView imageView)
@@ -140,9 +115,7 @@ namespace FuckNewDots.Managers
 
         public void Dispose()
         {
-            StandardLevelDetailViewSetContentPatch.LevelSelectedEvent -= OnLevelUpdated;
-            _beatmapCharacteristicSegmentedControl.didSelectCellEvent -= OnBeatmapCharacteristicSegmentedControlDidSelectCellEvent;
-            BeatmapDifficultySegmentedControlControllerSetDataPatch.BeatmapDifficultySegmentedControlControllerSetDataEvent -= OnBeatmapDifficultySegmentedControlControllerSetDataEvent;
+            StandardLevelDetailViewRefreshContentPatch.LevelSelectedEvent -= OnLevelUpdated;
         }
     }
 }

@@ -10,8 +10,6 @@ namespace FuckNewDots.Harmony_Patches
     [HarmonyPatch(typeof(StandardLevelDetailView), "SetContent")]
     internal class StandardLevelDetailViewSetContentPatch
     {
-        internal static Action<IBeatmapLevel> LevelSelectedEvent;
-
         private static IBeatmapLevel lastLevel = null;
         private static BeatmapDifficulty lastDefaultDifficulty;
         private static BeatmapCharacteristicSO lastDefaultBeatmapCharacteristic;
@@ -35,7 +33,6 @@ namespace FuckNewDots.Harmony_Patches
             {
                 return;
             }
-            LevelSelectedEvent?.Invoke(level);
 
             if (!Plugin.config.addCustomCharacteristic)
             {

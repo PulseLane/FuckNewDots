@@ -1,7 +1,10 @@
 ﻿using HarmonyLib;
 using IPA;
 using IPA.Config.Stores;
+using IPA.Loader;
 using SiraUtil.Zenject;
+using System;
+using System.Linq;
 using IPALogger = IPA.Logging.Logger;
 
 namespace FuckNewDots
@@ -11,6 +14,8 @@ namespace FuckNewDots
     {
         public static IPALogger logger;
         internal static Config config;
+
+        internal static bool isBSLInstalled;
 
         private readonly HarmonyLib.Harmony _harmony;
         private const string _harmonyID = "dev.PulseLane.FuckNewDots";
@@ -30,12 +35,28 @@ namespace FuckNewDots
         public void OnEnable()
         {
             _harmony.PatchAll();
+            CheckForBSLInstall();
         }
 
         [OnDisable]
         public void OnDisable()
         {
             _harmony.UnpatchSelf();
+        }
+
+        private bool CheckForBSLInstall()
+        {
+            try
+            {
+                var metadatas = PluginManager.EnabledPlugins.Where(x => x.Id == "BetterSongList");
+                isBSLInstalled = metadatas.Count() > 0;
+            }
+            catch (Exception e)
+            {
+                logger.Debug($"Error checking for BSL install: {e.Message}");
+                isBSLInstalled = false;
+            }
+            return isBSLInstalled;
         }
     }
 }
